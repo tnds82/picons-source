@@ -2,7 +2,7 @@
 
 When submitting an issue, make sure you follow these rules:
 
-- Entries to `srp-index` or `snp-index`, put them inside code blocks by using backticks ([help](https://guides.github.com/features/mastering-markdown)) or if they are really big, use a [gist](https://gist.github.com/).
+- Entries to `srp-index` or `snp-index`, put them inside code blocks by using triple backticks ([help](https://guides.github.com/features/mastering-markdown)) or if they are really big, use a [gist](https://gist.github.com/).
 - Logos should be inside an archive, correctly named (see below). Share the link.
 
 # NAMING
