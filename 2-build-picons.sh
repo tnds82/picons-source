@@ -12,27 +12,73 @@ echo -e "\nLog file located at: $logfile\n"
 ########################################################
 ## Search for required commands and exit if not found ##
 ########################################################
-commands=( convert pngquant ar tar xz sed grep tr column cat sort find mkdir rm cp mv ln readlink )
-
+commands=( tar sed grep tr column cat sort find mkdir rm cp mv ln readlink )
 for i in ${commands[@]}; do
     if ! which $i &> /dev/null; then
         missingcommands="$i $missingcommands"
     fi
 done
-if [[ ! -z $missingcommands ]]; then
+if [[ -z $missingcommands ]]; then
+    echo "INFO: All required commands are found!" >> $logfile
+else
     echo "ERROR: The following commands are not found: $missingcommands" >> $logfile
-    echo "ERROR: Try installing: imagemagick pngquant binutils" >> $logfile
+    echo "TERMINATED: Read the log file!"
     exit 1
 fi
 
-if which "inkscape" &> /dev/null && [[ -f $location/build-input/svgconverter.inkscape ]]; then
-    svgconverter="inkscape -w 850 --without-gui --export-area-drawing --export-png="
-elif which "rsvg-convert" &> /dev/null; then
-    svgconverter="rsvg-convert -w 1000 --keep-aspect-ratio --output "
+if which ar &> /dev/null; then
+    skipipk="false"
+    echo "INFO: Creation of ipk files enabled!" >> $logfile
 else
-    echo "ERROR: No SVG converter has been found!" >> $logfile
-    echo "ERROR: Try installing on Ubuntu: librsvg2-bin (or: inkscape)" >> $logfile
-    echo "ERROR: Try installing on Cygwin: rsvg (or: inkscape)" >> $logfile
+    skipipk="true"
+    echo "WARNING: Creation of ipk files disabled! Try installing: ar (found in package: binutils)" >> $logfile
+fi
+
+if which xz &> /dev/null; then
+    compressor="xz -9 --extreme --memlimit=40%" ; ext="xz"
+    echo "INFO: Using xz as compression!" >> $logfile
+elif which bzip2 &> /dev/null; then
+    compressor="bzip2 -9" ; ext="bz2"
+    echo "INFO: Using bzip2 as compression!" >> $logfile
+else
+    echo "ERROR: No archiver has been found! Try installing: xz (or: bzip2)" >> $logfile
+    echo "TERMINATED: Read the log file!"
+    exit 1
+fi
+
+if which pngquant &> /dev/null; then
+    pngquant="pngquant"
+    echo "INFO: Image compression enabled!" >> $logfile
+else
+    pngquant="cat"
+    echo "WARNING: Image compression disabled! Try installing: pngquant" >> $logfile
+fi
+
+if which convert &> /dev/null; then
+    echo "INFO: ImageMagick was found!" >> $logfile
+else
+    echo "ERROR: ImageMagick was not found! Try installing: imagemagick" >> $logfile
+    echo "TERMINATED: Read the log file!"
+    exit 1
+fi
+
+if [[ -f $location/build-input/svgconverter.conf ]]; then
+    svgconverterconf=$location/build-input/svgconverter.conf
+else
+    echo "$(date +'%H:%M:%S') - No \"svgconverter.conf\" file found in \"build-input\", using default file!"
+    svgconverterconf=$location/build-source/config/svgconverter.conf
+fi
+if which inkscape &> /dev/null && [[ $(grep -v -e '^#' -e '^$' $svgconverterconf) = "inkscape" ]]; then
+    svgconverter="inkscape -w 850 --without-gui --export-area-drawing --export-png="
+    echo "INFO: Using inkscape as svg converter!" >> $logfile
+elif which rsvg-convert &> /dev/null && [[ $(grep -v -e '^#' -e '^$' $svgconverterconf) = "rsvg" ]]; then
+    svgconverter="rsvg-convert -w 1000 --keep-aspect-ratio --output "
+    echo "INFO: Using rsvg as svg converter!" >> $logfile
+else
+    echo "ERROR: SVG converter: $(grep -v -e '^#' -e '^$' $svgconverterconf), was not found!" >> $logfile
+    echo "       Try installing on Ubuntu: librsvg2-bin (or: inkscape)" >> $logfile
+    echo "       Try installing in Cygwin: rsvg (or: inkscape)" >> $logfile
+    echo "TERMINATED: Read the log file!"
     exit 1
 fi
 
@@ -41,6 +87,7 @@ fi
 ###########################
 if [[ $location == *" "* ]]; then
     echo "ERROR: The path contains spaces, please move the repository to a path without spaces!" >> $logfile
+    echo "TERMINATED: Read the log file!"
     exit 1
 fi
 
@@ -68,6 +115,7 @@ if [[ ! $style = "srp-full" ]] && [[ ! $style = "snp-full" ]]; then
     for file in $location/build-output/servicelist-*-$style ; do
         if [[ ! -f $file ]]; then
             echo "ERROR: No $style servicelist has been found!" >> $logfile
+            echo "TERMINATED: Read the log file!"
             exit 1
         fi
     done
@@ -122,7 +170,7 @@ if [[ -f $location/build-input/backgrounds.conf ]]; then
     backgroundsconf=$location/build-input/backgrounds.conf
 else
     echo "$(date +'%H:%M:%S') - No \"backgrounds.conf\" file found in \"build-input\", using default file!"
-    backgroundsconf=$location/build-source/backgrounds/backgrounds.conf
+    backgroundsconf=$location/build-source/config/backgrounds.conf
 fi
 
 grep -v -e '^#' -e '^$' $backgroundsconf | while read lines ; do
@@ -161,38 +209,41 @@ grep -v -e '^#' -e '^$' $backgroundsconf | while read lines ; do
         if [[ -f $location/build-source/logos/$logoname.$logotype.svg ]]; then
             logo=$temp/cache/$logoname.$logotype.png
             if [[ ! -f $logo ]]; then
-                $svgconverter$logo $location/build-source/logos/$logoname.$logotype.svg >> $logfile
+                $svgconverter$logo $location/build-source/logos/$logoname.$logotype.svg 2>> $logfile >> $logfile
             fi
         else
             logo=$location/build-source/logos/$logoname.$logotype.png
         fi
 
-        convert $location/build-source/backgrounds/$resolution/$background.png \( $logo -background none -bordercolor none -border 100 -trim -border 1% -resize $resize -gravity center -extent $resolution +repage \) -layers merge - 2>> $logfile | pngquant - 2>> $logfile > $temp/package/picon/logos/$logoname.png
+        convert $location/build-source/backgrounds/$resolution/$background.png \( $logo -background none -bordercolor none -border 100 -trim -border 1% -resize $resize -gravity center -extent $resolution +repage \) -layers merge - 2>> $logfile | $pngquant - 2>> $logfile > $temp/package/picon/logos/$logoname.png
     done
 
     echo "$(date +'%H:%M:%S') - Creating binary packages: $packagenamenoversion"
     cp --no-dereference $temp/symlinks/* $temp/package/picon
-
-    mkdir $temp/package/CONTROL ; cat > $temp/package/CONTROL/control <<-EOF
-		Package: enigma2-plugin-picons-$packagenamenoversion
-		Version: $version
-		Section: base
-		Architecture: all
-		Maintainer: https://picons.xyz
-		Source: https://picons.xyz
-		Description: $packagenamenoversion
-		OE: enigma2-plugin-picons-$packagenamenoversion
-		HomePage: https://picons.xyz
-		License: unknown
-		Priority: optional
-	EOF
-
     find $temp/package -exec touch --no-dereference -t $timestamp {} \;
 
-    $location/resources/tools/ipkg-build.sh -o root -g root $temp/package $binaries >> $logfile
+    if [[ $skipipk = "false" ]]; then
+        mkdir $temp/package/CONTROL ; cat > $temp/package/CONTROL/control <<-EOF
+			Package: enigma2-plugin-picons-$packagenamenoversion
+			Version: $version
+			Section: base
+			Architecture: all
+			Maintainer: https://picons.xyz
+			Source: https://picons.xyz
+			Description: $packagenamenoversion
+			OE: enigma2-plugin-picons-$packagenamenoversion
+			HomePage: https://picons.xyz
+			License: unknown
+			Priority: optional
+		EOF
+        touch --no-dereference -t $timestamp $temp/package/CONTROL/control
+        $location/resources/tools/ipkg-build.sh -o root -g root $temp/package $binaries >> $logfile
+    fi
+
     mv $temp/package/picon $temp/package/$packagename
-    tar --dereference --owner=root --group=root -cf - --directory=$temp/package $packagename --exclude=logos | xz -9 --extreme --memlimit=40% 2>> $logfile > $binaries/$packagename.hardlink.tar.xz
-    tar --owner=root --group=root -cf - --directory=$temp/package $packagename | xz -9 --extreme --memlimit=40% 2>> $logfile > $binaries/$packagename.symlink.tar.xz
+
+    tar --dereference --owner=root --group=root -cf - --directory=$temp/package $packagename --exclude=logos | $compressor 2>> $logfile > $binaries/$packagename.hardlink.tar.$ext
+    tar --owner=root --group=root -cf - --directory=$temp/package $packagename | $compressor 2>> $logfile > $binaries/$packagename.symlink.tar.$ext
 
     find $binaries -exec touch -t $timestamp {} \;
     rm -rf $temp/package

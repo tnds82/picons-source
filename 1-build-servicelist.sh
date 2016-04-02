@@ -24,6 +24,7 @@ for i in ${commands[@]}; do
 done
 if [[ ! -z $missingcommands ]]; then
     echo "ERROR: The following commands are not found: $missingcommands" >> $logfile
+    echo "TERMINATED: Read the log file!"
     exit 1
 fi
 
@@ -32,6 +33,7 @@ fi
 ###########################
 if [[ $location == *" "* ]]; then
     echo "ERROR: The path contains spaces, please move the repository to a path without spaces!" >> $logfile
+    echo "TERMINATED: Read the log file!"
     exit 1
 fi
 
@@ -55,6 +57,7 @@ fi
 #############################
 if [[ ! $style = "srp" ]] && [[ ! $style = "snp" ]]; then
     echo "ERROR: Unknown style!" >> $logfile
+    echo "TERMINATED: Read the log file!"
     exit 1
 fi
 
