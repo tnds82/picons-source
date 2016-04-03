@@ -4,7 +4,7 @@ All the full resolution channel logos and their link to the actual channel (=ser
 
 # BUILDING THE PICONS
 
-[Ubuntu](http://www.ubuntu.com/download) and [Cygwin on Windows](https://cygwin.com/install.html) are tested and supported platforms for building the picons.
+[Ubuntu](http://www.ubuntu.com/download), [Cygwin](https://cygwin.com/install.html) and [Git Bash](https://git-scm.com/download/win) are tested and supported platforms for building the picons. Git Bash however has no ipk file as output. See below for some [benchmarks](https://github.com/picons/picons-source#benchmarks).
 
 Download the repository by using the following command:
 ```
@@ -125,3 +125,81 @@ This is where all the channel logos go and how they are linked to the serviceref
 ## resources/tools
 
 Some additional scripts used by the main scripts.
+
+# BENCHMARKS
+
+```
+Git Bash - Intel Core i5-6600 16GB RAM
+--------------------------------------
+
+Build: snp-full.100x60-86x46.light.on.black
+Image Compression: none
+Archive Compression: bzip2
+ImageMagick: ImageMagick 6.9.3-7 Q16 x64
+SVG Converter: Inkscape 0.91 r13725
+Output: *.nolink.tar.bzip2, *.script.tar.bzip2
+
+real    25m10.520s
+user    1m47.206s
+sys     4m8.019s
+
+
+Cygwin - Intel Core i5-6600 16GB RAM
+------------------------------------
+
+Build: snp-full.100x60-86x46.light.on.black
+Image Compression: pngquant
+Archive Compression: xz
+ImageMagick: ImageMagick 6.9.1-3 Q16 x86_64
+SVG Converter: Inkscape 0.91 r13725
+Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
+
+real    26m35.348s
+user    14m2.122s
+sys     7m47.723s
+
+
+Cygwin - Intel Core i5-6600 16GB RAM
+------------------------------------
+
+Build: snp-full.100x60-86x46.light.on.black
+Image Compression: pngquant
+Archive Compression: xz
+ImageMagick: ImageMagick 6.9.1-3 Q16 x86_64
+SVG Converter: rsvg 2.40.11
+Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
+
+real    15m29.627s
+user    5m31.907s
+sys     4m10.524s
+
+
+VirtualBox (Ubuntu 15.10, 6GB RAM) - Intel Core i5-6600 16GB RAM
+----------------------------------------------------------------
+
+Build: snp-full.100x60-86x46.light.on.black
+Image Compression: pngquant
+Archive Compression: xz
+ImageMagick: ImageMagick 6.8.9-9 Q16 x86_64
+SVG Converter: Inkscape 0.91 r13725
+Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
+
+real    9m11.571s
+user    6m45.696s
+sys     0m29.388s
+
+
+VirtualBox (Ubuntu 15.10, 6GB RAM) - Intel Core i5-6600 16GB RAM
+----------------------------------------------------------------
+
+Build: snp-full.100x60-86x46.light.on.black
+Image Compression: pngquant
+Archive Compression: xz
+ImageMagick: ImageMagick 6.8.9-9 Q16 x86_64
+SVG Converter: rsvg 2.40.10
+Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
+
+real    4m42.611s
+user    3m8.620s
+sys     0m8.380s
+```

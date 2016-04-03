@@ -4,7 +4,8 @@ location=$1
 temp=$2
 style=$3
 
-mkdir -p $temp/symlinks
+echo "#!/bin/sh" > $temp/create-symlinks.sh
+chmod 755 $temp/create-symlinks.sh
 
 #####################################################
 ## Create symlinks for SNP & SRP using servicelist ##
@@ -25,11 +26,11 @@ if [[ $style = "snp" ]] || [[ $style = "srp" ]]; then
         snpname=${link_snp[0]}
 
         if [[ ! $logo_srp = "--------" ]]; then
-            ln -s -f logos/$logo_srp.png $temp/symlinks/$serviceref.png
+            echo "ln -s -f logos/$logo_srp.png $temp/package/picon/$serviceref.png" >> $temp/create-symlinks.sh
         fi
 
         if [[ $style = "snp" ]] && [[ ! $logo_snp = "--------" ]]; then
-            ln -s -f logos/$logo_snp.png $temp/symlinks/$snpname.png
+            echo "ln -s -f logos/$logo_snp.png $temp/package/picon/$snpname.png" >> $temp/create-symlinks.sh
         fi
     done
 fi
@@ -45,9 +46,9 @@ if [[ $style = "snp-full" ]]; then
         snpname=${link_snp[0]}
 
         if [[ $snpname == *"_"* ]]; then
-            ln -s -f logos/$logo_snp.png $temp/symlinks/'1_0_1_'$snpname'_0_0_0'.png
+            echo "ln -s -f logos/$logo_snp.png $temp/package/picon/1_0_1_"$snpname"_0_0_0.png" >> $temp/create-symlinks.sh
         else
-            ln -s -f logos/$logo_snp.png $temp/symlinks/$snpname.png
+            echo "ln -s -f logos/$logo_snp.png $temp/package/picon/$snpname.png" >> $temp/create-symlinks.sh
         fi
     done
 fi
@@ -62,6 +63,6 @@ if [[ $style = "srp-full" ]]; then
         logo_srp=${link_srp[1]}
         unique_id=${link_srp[0]}
 
-        ln -s -f logos/$logo_srp.png $temp/symlinks/'1_0_1_'$unique_id'_0_0_0'.png
+        echo "ln -s -f logos/$logo_srp.png $temp/package/picon/1_0_1_"$unique_id"_0_0_0.png" >> $temp/create-symlinks.sh
     done
 fi

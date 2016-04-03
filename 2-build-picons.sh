@@ -7,7 +7,19 @@ location=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 temp=$(mktemp -d --suffix=.picons)
 logfile=$(mktemp --suffix=.picons.log)
 
+path_inkscape=$(find /c/PROGRA~1/Inkscape* -maxdepth 0 -type d 2>>/dev/null); if [[ -n $path_inkscape ]]; then export PATH=$PATH:$path_inkscape; fi
+path_imagemagick=$(find /c/PROGRA~1/ImageMagick* -maxdepth 0 -type d 2>>/dev/null); if [[ -n $path_imagemagick ]]; then export PATH=$PATH:$path_imagemagick; fi
+
 echo -e "\nLog file located at: $logfile\n"
+
+###########################
+## Check path for spaces ##
+###########################
+if [[ $location == *" "* ]]; then
+    echo "ERROR: The path contains spaces, please move the repository to a path without spaces!" >> $logfile
+    echo "TERMINATED: Read the log file!"
+    exit 1
+fi
 
 ########################################################
 ## Search for required commands and exit if not found ##
@@ -78,15 +90,7 @@ else
     echo "ERROR: SVG converter: $(grep -v -e '^#' -e '^$' $svgconverterconf), was not found!" >> $logfile
     echo "       Try installing on Ubuntu: librsvg2-bin (or: inkscape)" >> $logfile
     echo "       Try installing in Cygwin: rsvg (or: inkscape)" >> $logfile
-    echo "TERMINATED: Read the log file!"
-    exit 1
-fi
-
-###########################
-## Check path for spaces ##
-###########################
-if [[ $location == *" "* ]]; then
-    echo "ERROR: The path contains spaces, please move the repository to a path without spaces!" >> $logfile
+    echo "       Try installing on Windows: inkscape" >> $logfile
     echo "TERMINATED: Read the log file!"
     exit 1
 fi
@@ -163,7 +167,8 @@ $location/resources/tools/create-symlinks.sh $location $temp $style
 ####################################################################
 ## Start the actual conversion to picons and creation of packages ##
 ####################################################################
-logocount=$(readlink $temp/symlinks/* | sed -e 's/logos\///g' -e 's/.png//g' | sort -u | wc -l)
+logocollection=$(grep -v -e '^#' -e '^$' $temp/create-symlinks.sh | sed -e 's/^.*logos\///g' -e 's/.png.*$//g' | sort -u )
+logocount=$(echo "$logocollection" | wc -l)
 mkdir -p $temp/cache
 
 if [[ -f $location/build-input/backgrounds.conf ]]; then
@@ -194,7 +199,7 @@ grep -v -e '^#' -e '^$' $backgroundsconf | while read lines ; do
     echo "$(date +'%H:%M:%S') -----------------------------------------------------------"
     echo "$(date +'%H:%M:%S') - Creating picons: $packagenamenoversion"
 
-    readlink $temp/symlinks/* | sed -e 's/logos\///g' -e 's/.png//g' | sort -u | while read logoname ; do
+    echo "$logocollection" | while read logoname ; do
         ((currentlogo++))
         echo -ne "           Converting logo: $currentlogo/$logocount"\\r
 
@@ -219,10 +224,10 @@ grep -v -e '^#' -e '^$' $backgroundsconf | while read lines ; do
     done
 
     echo "$(date +'%H:%M:%S') - Creating binary packages: $packagenamenoversion"
-    cp --no-dereference $temp/symlinks/* $temp/package/picon
+    $temp/create-symlinks.sh
     find $temp/package -exec touch --no-dereference -t $timestamp {} \;
 
-    if [[ $skipipk = "false" ]]; then
+    if [[ $skipipk = "false" ]] && [[ $OSTYPE != "msys" ]]; then
         mkdir $temp/package/CONTROL ; cat > $temp/package/CONTROL/control <<-EOF
 			Package: enigma2-plugin-picons-$packagenamenoversion
 			Version: $version
@@ -242,8 +247,16 @@ grep -v -e '^#' -e '^$' $backgroundsconf | while read lines ; do
 
     mv $temp/package/picon $temp/package/$packagename
 
-    tar --dereference --owner=root --group=root -cf - --directory=$temp/package $packagename --exclude=logos | $compressor 2>> $logfile > $binaries/$packagename.hardlink.tar.$ext
-    tar --owner=root --group=root -cf - --directory=$temp/package $packagename | $compressor 2>> $logfile > $binaries/$packagename.symlink.tar.$ext
+    if [[ $OSTYPE != "msys" ]]; then
+        tar --dereference --owner=root --group=root -cf - --directory=$temp/package $packagename --exclude=logos | $compressor 2>> $logfile > $binaries/$packagename.hardlink.tar.$ext
+        tar --owner=root --group=root -cf - --directory=$temp/package $packagename | $compressor 2>> $logfile > $binaries/$packagename.symlink.tar.$ext
+    else
+        tar --dereference --owner=root --group=root -cf - --directory=$temp/package $packagename --exclude=logos | $compressor 2>> $logfile > $binaries/$packagename.nolink.tar.$ext
+        rm -rf $temp/package/$packagename/*.png
+        sed -e "s|$temp/package/picon/||g" $temp/create-symlinks.sh > $temp/package/$packagename/create-symlinks.sh
+        chmod 755 $temp/package/$packagename/create-symlinks.sh
+        tar --owner=root --group=root -cf - --directory=$temp/package $packagename | $compressor 2>> $logfile > $binaries/$packagename.script.tar.$ext
+    fi
 
     find $binaries -exec touch -t $timestamp {} \;
     rm -rf $temp/package
@@ -254,4 +267,5 @@ done
 ######################################
 if [[ -d $temp ]]; then rm -rf $temp; fi
 
+echo "$(date +'%H:%M:%S') - FINISHED!"
 exit 0
