@@ -1,3 +1,5 @@
+one=one
+onehd=onehd
 rtpinternationaleurope=rtpi
 dubaisportschannel3=dubaisports3
 blaze=blaze
@@ -1300,8 +1302,8 @@ eentertainment=eentertainment
 eentertainmhd=eentertainmenthd
 egofm=egofm
 ehd=eentertainmenthd
-einsfestivalhd=einsfestivalhd
-einsfestival=einsfestival
+einsfestivalhd=onehd
+einsfestival=one
 einsplushd=einsplushd
 einsplus=einsplus
 elchourouk=elchourouk
