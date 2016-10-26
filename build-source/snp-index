@@ -1,3 +1,5 @@
+mgm=mgmchannel
+mgmhd=mgmchannelhd
 4news=4news
 fashionbox=fashionbox
 fashionboxhd=fashionboxhd
@@ -2419,8 +2421,6 @@ mezzohd=mezzohd
 mezzolive=mezzolivehd
 mezzolivehd=mezzolivehd
 mezzo=mezzo
-mgmhd=mgmhd
-mgm=mgm
 milanchannel=milanchannel
 minimax=minimax
 miniminiplushd=miniminiplushd
