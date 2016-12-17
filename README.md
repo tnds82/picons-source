@@ -4,7 +4,7 @@ All the full resolution channel logos and their link to the actual channel (=ser
 
 # BUILDING THE PICONS
 
-[Ubuntu](http://www.ubuntu.com/download), [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), [Cygwin](https://cygwin.com/install.html) and [Git Bash](https://git-scm.com/download/win) are tested and supported platforms for building the picons. Git Bash however has no ipk file as output. See below for some [benchmarks](https://github.com/picons/picons-source#benchmarks).
+[Ubuntu](http://www.ubuntu.com/download), [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), [Cygwin](https://cygwin.com/install.html) and [Git Bash](https://git-scm.com/download) are tested and supported platforms for building the picons. Git Bash however has no ipk file as output. See below for some [benchmarks](https://github.com/picons/picons-source#benchmarks).
 
 Download the repository by using the following command:
 ```
