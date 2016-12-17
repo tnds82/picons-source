@@ -4,7 +4,7 @@
 # Carl Worth <cworth@east.isi.edu>
 # Robert E. Anderson <rea@sr.unh.edu>
 
-# Modified by picons.github.io
+# Modified by picons.eu
 
 set -e
 
