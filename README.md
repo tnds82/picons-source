@@ -129,34 +129,19 @@ Some additional scripts used by the main scripts.
 # BENCHMARKS
 
 ```
-Git Bash - Intel Core i5-6600 16GB RAM
---------------------------------------
-
-Build: snp-full.100x60-86x46.light.on.black
-Image Compression: none
-Archive Compression: bzip2
-ImageMagick: ImageMagick 6.9.3-7 Q16 x64
-SVG Converter: Inkscape 0.91 r13725
-Output: *.nolink.tar.bzip2, *.script.tar.bzip2
-
-real    25m10.520s
-user    1m47.206s
-sys     4m8.019s
-
-
-Cygwin - Intel Core i5-6600 16GB RAM
-------------------------------------
+Bash on Ubuntu on Windows (Ubuntu 14.04.5 LTS) - Intel Core i5-6600 16GB RAM
+----------------------------------------------------------------------------
 
 Build: snp-full.100x60-86x46.light.on.black
 Image Compression: pngquant
 Archive Compression: xz
-ImageMagick: ImageMagick 6.9.1-3 Q16 x86_64
-SVG Converter: Inkscape 0.91 r13725
+ImageMagick: ImageMagick 6.7.7-10 Q16
+SVG Converter: rsvg 2.40.2
 Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
 
-real    26m35.348s
-user    14m2.122s
-sys     7m47.723s
+real    6m35.650s
+user    6m17.609s
+sys     3m26.828s
 
 
 Cygwin - Intel Core i5-6600 16GB RAM
@@ -174,19 +159,34 @@ user    5m31.907s
 sys     4m10.524s
 
 
-VirtualBox (Ubuntu 15.10, 6GB RAM) - Intel Core i5-6600 16GB RAM
-----------------------------------------------------------------
+Cygwin - Intel Core i5-6600 16GB RAM
+------------------------------------
 
 Build: snp-full.100x60-86x46.light.on.black
 Image Compression: pngquant
 Archive Compression: xz
-ImageMagick: ImageMagick 6.8.9-9 Q16 x86_64
+ImageMagick: ImageMagick 6.9.1-3 Q16 x86_64
 SVG Converter: Inkscape 0.91 r13725
 Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
 
-real    9m11.571s
-user    6m45.696s
-sys     0m29.388s
+real    26m35.348s
+user    14m2.122s
+sys     7m47.723s
+
+
+Git Bash - Intel Core i5-6600 16GB RAM
+--------------------------------------
+
+Build: snp-full.100x60-86x46.light.on.black
+Image Compression: none
+Archive Compression: bzip2
+ImageMagick: ImageMagick 6.9.3-7 Q16 x64
+SVG Converter: Inkscape 0.91 r13725
+Output: *.nolink.tar.bzip2, *.script.tar.bzip2
+
+real    25m10.520s
+user    1m47.206s
+sys     4m8.019s
 
 
 VirtualBox (Ubuntu 15.10, 6GB RAM) - Intel Core i5-6600 16GB RAM
@@ -202,4 +202,19 @@ Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
 real    4m42.611s
 user    3m8.620s
 sys     0m8.380s
+
+
+VirtualBox (Ubuntu 15.10, 6GB RAM) - Intel Core i5-6600 16GB RAM
+----------------------------------------------------------------
+
+Build: snp-full.100x60-86x46.light.on.black
+Image Compression: pngquant
+Archive Compression: xz
+ImageMagick: ImageMagick 6.8.9-9 Q16 x86_64
+SVG Converter: Inkscape 0.91 r13725
+Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
+
+real    9m11.571s
+user    6m45.696s
+sys     0m29.388s
 ```
