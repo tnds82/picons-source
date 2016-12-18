@@ -6,8 +6,8 @@ All the full resolution channel logos and their link to the actual channel (=ser
 
 [Ubuntu](http://www.ubuntu.com/download), [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), [Cygwin](https://cygwin.com/install.html) and [Git Bash](https://git-scm.com/download) are tested and supported platforms for building the picons.
 
-When using [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), clone to `/mnt/c`, which is your `C:\` drive on Windows. That way you can manipulate your files from within Windows, going to `%localappdata%\lxss\rootfs` inside Windows, will create problems.
-[Git Bash](https://git-scm.com/download) should be used as a last resort, the output is limited and it is seriously slow.
+When using [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), clone to `/mnt/c`, which is your `C:\` drive on Windows. That way you can manipulate your files from within Windows, going to `%localappdata%\lxss\rootfs` inside Windows, will create problems.  
+[Git Bash](https://git-scm.com/download) should be used as a last resort, the output is limited and it is seriously slow.  
 See below for some [benchmarks](https://github.com/picons/picons-source#benchmarks).
 
 Download the repository by using one of the following commands:
