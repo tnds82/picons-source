@@ -6,16 +6,29 @@ All the full resolution channel logos and their link to the actual channel (=ser
 
 [Ubuntu](http://www.ubuntu.com/download), [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), [Cygwin](https://cygwin.com/install.html) and [Git Bash](https://git-scm.com/download) are tested and supported platforms for building the picons. Git Bash however has no ipk file as output. See below for some [benchmarks](https://github.com/picons/picons-source#benchmarks).
 
-Download the repository by using the following command:
+When using [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), clone to `/mnt/c`, which is your `C:\` drive on Windows. That way you can manipulate your files from within Windows, going to `%localappdata%\lxss\rootfs` inside Windows, will create problems.
+[Git Bash](https://git-scm.com/download) should be used as a last resort, the output is limited and it is seriously slow.
+
+Download the repository by using one of the following commands:
 ```
+# Ubuntu, Cygwin and Git Bash
 git clone https://github.com/picons/picons-source.git /tmp/picons-source
+
+# Bash on Ubuntu on Windows
+git clone https://github.com/picons/picons-source.git /mnt/c/picons-source
 ```
 
 Next, copy the required files to the folder [build-input](https://github.com/picons/picons-source#build-input).
 
 We will start the creation of the servicelist and the picons with the following commands:
 ```
+# Ubuntu, Cygwin and Git Bash
 cd /tmp/picons-source
+
+# Bash on Ubuntu on Windows
+cd /mnt/c/picons-source
+
+# Ubuntu, Cygwin, Git Bash and Bash on Ubuntu on Windows
 ./1-build-servicelist.sh
 ./2-build-picons.sh
 ```
