@@ -137,6 +137,6 @@ servicelist-vdr-srp
 
 This is where all the channel logos go and how they are linked to the serviceref or a simplified version of the name. Backgrounds and the default `backgrounds.conf` file can also be found in this directory.
 
-## resources/tools
+## resources
 
-Some additional scripts used by the main scripts.
+Some additional files.
