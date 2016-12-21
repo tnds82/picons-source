@@ -12,11 +12,22 @@ When using [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/ws
 
 Download the repository by using one of the following commands:
 ```
-# Ubuntu, Cygwin and Git Bash
-git clone https://github.com/picons/picons-source.git /tmp/picons-source
+# Ubuntu
+sudo apt-get install git binutils pngquant imagemagick librsvg2-bin
+git clone https://github.com/picons/picons-source.git ~/picons-source
 
 # Bash on Ubuntu on Windows
+sudo apt-get install git binutils pngquant imagemagick librsvg2-bin
 git clone https://github.com/picons/picons-source.git /mnt/c/picons-source
+
+# Cygwin
+# Install the packages: git binutils pngquant rsvg
+# Install the programs: ImageMagick for Windows
+git clone https://github.com/picons/picons-source.git ~/picons-source
+
+# Git Bash
+# Install the programs: ImageMagick and Inkscape for Windows
+git clone https://github.com/picons/picons-source.git ~/picons-source
 ```
 
 Next, copy the required files to the folder [build-input](https://github.com/picons/picons-source#build-input).
@@ -24,7 +35,7 @@ Next, copy the required files to the folder [build-input](https://github.com/pic
 We will start the creation of the servicelist and the picons with the following commands:
 ```
 # Ubuntu, Cygwin and Git Bash
-cd /tmp/picons-source
+cd ~/picons-source
 
 # Bash on Ubuntu on Windows
 cd /mnt/c/picons-source
