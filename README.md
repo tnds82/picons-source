@@ -4,43 +4,33 @@ All the full resolution channel logos and their link to the actual channel (=ser
 
 # BUILDING THE PICONS
 
-[Ubuntu](http://www.ubuntu.com/download), [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), [Cygwin](https://cygwin.com/install.html) and [Git Bash](https://git-scm.com/download) are tested and supported platforms for building the picons.
+[Ubuntu](http://www.ubuntu.com/download) and [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl) are tested and supported platforms for building the picons.
 
-When using [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), clone to `/mnt/c`, which is your `C:\` drive on Windows. That way you can manipulate your files from within Windows, going to `%localappdata%\lxss\rootfs` directly inside Windows and modifying files, will create problems.
-
-[Git Bash](https://git-scm.com/download) should be used as a last resort, the output is limited and it is seriously slow. See below for some [benchmarks](https://github.com/picons/picons-source#benchmarks).
+When using [Bash on Ubuntu on Windows](https://msdn.microsoft.com/commandline/wsl), clone to `/mnt/c`, which is your `C:\` drive on Windows. That way you can manipulate your files from within Windows, going to `%localappdata%\lxss\rootfs` directly inside Windows and modifying files, is not recommended.
 
 Download the repository by using one of the following commands:
 ```
-# Ubuntu
+# Ubuntu, Bash on Ubuntu on Windows
 sudo apt-get install git binutils pngquant imagemagick librsvg2-bin
+
+# Ubuntu
 git clone https://github.com/picons/picons-source.git ~/picons-source
 
 # Bash on Ubuntu on Windows
-sudo apt-get install git binutils pngquant imagemagick librsvg2-bin
 git clone https://github.com/picons/picons-source.git /mnt/c/picons-source
-
-# Cygwin
-# Install the packages: git binutils pngquant rsvg
-# Install the programs: ImageMagick for Windows
-git clone https://github.com/picons/picons-source.git ~/picons-source
-
-# Git Bash
-# Install the programs: ImageMagick and Inkscape for Windows
-git clone https://github.com/picons/picons-source.git ~/picons-source
 ```
 
 Next, copy the required files to the folder [build-input](https://github.com/picons/picons-source#build-input).
 
 We will start the creation of the servicelist and the picons with the following commands:
 ```
-# Ubuntu, Cygwin and Git Bash
+# Ubuntu
 cd ~/picons-source
 
 # Bash on Ubuntu on Windows
 cd /mnt/c/picons-source
 
-# Ubuntu, Cygwin, Git Bash and Bash on Ubuntu on Windows
+# Ubuntu, Bash on Ubuntu on Windows
 ./1-build-servicelist.sh
 ./2-build-picons.sh
 ```
@@ -150,96 +140,3 @@ This is where all the channel logos go and how they are linked to the serviceref
 ## resources/tools
 
 Some additional scripts used by the main scripts.
-
-# BENCHMARKS
-
-```
-Bash on Ubuntu on Windows (Ubuntu 14.04.5 LTS) - Intel Core i5-6600 16GB RAM
-----------------------------------------------------------------------------
-
-Build: snp-full.100x60-86x46.light.on.black
-Image Compression: pngquant
-Archive Compression: xz
-ImageMagick: ImageMagick 6.7.7-10 Q16
-SVG Converter: rsvg 2.40.2
-Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
-
-real    6m35.650s
-user    6m17.609s
-sys     3m26.828s
-
-
-Cygwin - Intel Core i5-6600 16GB RAM
-------------------------------------
-
-Build: snp-full.100x60-86x46.light.on.black
-Image Compression: pngquant
-Archive Compression: xz
-ImageMagick: ImageMagick 6.9.1-3 Q16 x86_64
-SVG Converter: rsvg 2.40.11
-Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
-
-real    15m29.627s
-user    5m31.907s
-sys     4m10.524s
-
-
-Cygwin - Intel Core i5-6600 16GB RAM
-------------------------------------
-
-Build: snp-full.100x60-86x46.light.on.black
-Image Compression: pngquant
-Archive Compression: xz
-ImageMagick: ImageMagick 6.9.1-3 Q16 x86_64
-SVG Converter: Inkscape 0.91 r13725
-Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
-
-real    26m35.348s
-user    14m2.122s
-sys     7m47.723s
-
-
-Git Bash - Intel Core i5-6600 16GB RAM
---------------------------------------
-
-Build: snp-full.100x60-86x46.light.on.black
-Image Compression: none
-Archive Compression: bzip2
-ImageMagick: ImageMagick 6.9.3-7 Q16 x64
-SVG Converter: Inkscape 0.91 r13725
-Output: *.nolink.tar.bzip2, *.script.tar.bzip2
-
-real    25m10.520s
-user    1m47.206s
-sys     4m8.019s
-
-
-VirtualBox (Ubuntu 15.10, 6GB RAM) - Intel Core i5-6600 16GB RAM
-----------------------------------------------------------------
-
-Build: snp-full.100x60-86x46.light.on.black
-Image Compression: pngquant
-Archive Compression: xz
-ImageMagick: ImageMagick 6.8.9-9 Q16 x86_64
-SVG Converter: rsvg 2.40.10
-Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
-
-real    4m42.611s
-user    3m8.620s
-sys     0m8.380s
-
-
-VirtualBox (Ubuntu 15.10, 6GB RAM) - Intel Core i5-6600 16GB RAM
-----------------------------------------------------------------
-
-Build: snp-full.100x60-86x46.light.on.black
-Image Compression: pngquant
-Archive Compression: xz
-ImageMagick: ImageMagick 6.8.9-9 Q16 x86_64
-SVG Converter: Inkscape 0.91 r13725
-Output: *.ipk, *.hardlink.tar.xz, *.symlink.tar.xz
-
-real    9m11.571s
-user    6m45.696s
-sys     0m29.388s
-```
